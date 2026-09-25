@@ -116,6 +116,12 @@ typedef struct {
    * This can be set to 0 to disable allocating this region.
    */
   uint32_t mem2Size;
+
+  /*
+   * Additional directories (with trailing separator) searched first for runtime libraries. Optional.
+   */
+  const char* const* runtimeSearchPaths;
+  size_t runtimeSearchPathCount;
 } AuroraConfig;
 
 typedef struct {

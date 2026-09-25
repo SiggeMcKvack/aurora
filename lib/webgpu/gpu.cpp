@@ -793,6 +793,17 @@ bool initialize(AuroraBackend auroraBackend, bool allowCpu) {
     dawnInstanceDescriptor.nextInChain = &instanceTogglesDescriptor;
     dawnInstanceDescriptor.backendValidationLevel = dawn::native::BackendValidationLevel::Disabled;
     dawnInstanceDescriptor.SetLoggingCallback(wgpu_log);
+    std::vector<const char*> runtimeSearchPaths;
+    if (g_config.runtimeSearchPaths != nullptr) {
+      for (size_t i = 0; i < g_config.runtimeSearchPathCount; ++i) {
+        if (g_config.runtimeSearchPaths[i] != nullptr) {
+          Log.info("Additional runtime search path: {}", g_config.runtimeSearchPaths[i]);
+          runtimeSearchPaths.push_back(g_config.runtimeSearchPaths[i]);
+        }
+      }
+    }
+    dawnInstanceDescriptor.additionalRuntimeSearchPaths = runtimeSearchPaths.data();
+    dawnInstanceDescriptor.additionalRuntimeSearchPathsCount = static_cast<uint32_t>(runtimeSearchPaths.size());
 #ifdef TRACY_ENABLE
     dawnInstanceDescriptor.platform = tracy_dawn_platform();
 #endif
